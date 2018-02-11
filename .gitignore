@@ -6,6 +6,7 @@ gradle.properties
 *.gradle
 gradlew.bat
 gradlew
+*.mp3
 
 # Created by https://www.gitignore.io/api/java,gradle,android,intellij,androidstudio
 
