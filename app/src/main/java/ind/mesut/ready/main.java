@@ -73,36 +73,52 @@ public class main extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("mode:", "ondestroy");
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         Log.d("voice: ", String.valueOf(isVoiceInteraction()));
 
+        Intent intent = getIntent();
+
+        Log.d("intent extra:", String.valueOf(intent.getExtras()));
+        Log.d("intent data:", String.valueOf(intent.getData()));
+        Log.d("intent data:", String.valueOf(intent.getDataString()));
+
+        Log.d("state:", "onResume");
+
         if (isVoiceInteraction()) {
-            //Log.d("voice: ", "startVoiceTrigger: ");
-            Option option = new Option("start", 0);
-            option.addSynonym("ready");
-            option.addSynonym("go");
-            option.addSynonym("take it");
-            option.addSynonym("ok");
+            VoiceInteractor.PickOptionRequest.Option option1 = new VoiceInteractor.PickOptionRequest.Option("Light", 0);
+            option1.addSynonym("White");
+            option1.addSynonym("Jedi");
+            VoiceInteractor.PickOptionRequest.Option option2 = new VoiceInteractor.PickOptionRequest.Option("Dark", 1);
+            option2.addSynonym("Black");
+            option2.addSynonym("Sith");
 
-            VoiceInteractor.Prompt prompt = new VoiceInteractor.Prompt("start");
+            Option[] options = new Option[]{option1, option2};
+            VoiceInteractor.Prompt prompt = new VoiceInteractor.Prompt("Which side are you on");
 
-            getVoiceInteractor().submitRequest(new PickOptionRequest(prompt, new Option[]{option}, null) {
+            this.getVoiceInteractor().submitRequest(new PickOptionRequest(prompt, options, null)
+            {
                 @Override
                 public void onPickOptionResult(boolean finished, Option[] selections, Bundle result) {
                     if (finished && selections.length == 1) {
-                        Message message = Message.obtain();
-                        message.obj = result;
-                        mP.start();
-                    } else {
-                        getActivity().finish();
+                        if (selections[0].getIndex() == 0) Log.d("optionselected", "light");
+                        else if (selections[0].getIndex() == 1) Log.d("optionselected", "dark");
                     }
                 }
+
                 @Override
                 public void onCancel() {
-                    getActivity().finish();
+                    Log.d("voice", "cancel");
                 }
-            });
+            }
+            , "Theme Selector");
+
         }
     }
 }
