@@ -25,27 +25,27 @@ import java.util.StringTokenizer;
 
 public class main extends AppCompatActivity {
 
+    //Initialization of Mediaplayer
     MediaPlayer mP;
+    SeekBar speed;
+    boolean autoPlay = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent intent = getIntent();
-        Log.d("intent", String.valueOf(intent.getData()));
-        Log.d("voice: ", String.valueOf(isVoiceInteraction()));
-
         mP = MediaPlayer.create(this, R.raw.sample);
         final Button startButton = (Button) findViewById(R.id.playButton);
-        final SeekBar speed = (SeekBar) findViewById(R.id.speed);
+        speed = (SeekBar) findViewById(R.id.speed);
         final TextView textV = (TextView) findViewById(R.id.textView);
+        autoPlay = false;
 
+        //Set Playing Speed
         speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 float speed = 0.75f+i*0.25f;
-                textV.setText(Float.toString(speed));
+                textV.setText("Speed: " + Float.toString(speed));
                 if(mP.isPlaying()){
                     mP.setPlaybackParams(mP.getPlaybackParams().setSpeed(speed));
                 }
@@ -59,29 +59,24 @@ public class main extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("position: ", Integer.toString(mP.getCurrentPosition()));
-                Log.d("position: ", Integer.toString(mP.getDuration()));
-                /*
-                if (mP.isPlaying()){
-                    mP.stop();
-                    try{
-                        mP.prepare();
-                    } catch (Exception e){};
-
-                    startButton.setText("Start");
-                }else{
-                    mP.start();
-                    startButton.setText("Stop");
-                }
-                */
                 if (mP.isPlaying()){
                     mP.pause();
                     startButton.setText("Start");
+                    autoPlay = false;
 
                 }else{
                     mP.start();
-                    startButton.setText("Stop");
+                    startButton.setText("Pause");
+                    autoPlay = true;
                 }
+                /*
+                Log.d("position: ", Integer.toString(mP.getCurrentPosition()));
+                Log.d("position: ", Integer.toString(mP.getDuration()));
+                mP.stop();
+                try{
+                    mP.prepare();
+                } catch (Exception e){};
+                */
             }
         });
     }
@@ -92,98 +87,58 @@ public class main extends AppCompatActivity {
         Log.d("mode:", "ondestroy");
     }
 
-    public void doOp(Integer optionId){
-        Log.d("doOp", String.valueOf(optionId));
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("mode:", "onPause");
         if (mP.isPlaying()){
             mP.pause();
-
-        }else{
-            mP.start();
+            autoPlay = true;
         }
-    }
-
-    void Prompt(Option[] options, String promptText){
-        VoiceInteractor.Prompt prompt = new VoiceInteractor.Prompt(promptText);
-
-        this.getVoiceInteractor().submitRequest(
-                new PickOptionRequest(prompt, options, null) {
-                    @Override
-                    public void onPickOptionResult(boolean finished, Option[] selections, Bundle result) {
-                        Log.d("selections", selections.toString());
-                        if (finished && selections.length == 1) {
-                            Log.d("selections", selections.toString());
-                            Log.d("id", String.valueOf(selections[0].getIndex()));
-                            Log.d("text", String.valueOf(selections.toString()));
-                            doOp(selections[0].getIndex());
-                        }
-                    }
-                    @Override
-                    public void onCancel() {
-                        Log.d("voice", "cancel");
-                    }
-                }, "MainPrompt");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("voice: ", String.valueOf(isVoiceInteraction()));
-
-        Intent intent = getIntent();
-
-        Log.d("intent extra:", String.valueOf(intent.getExtras()));
-        Log.d("intent data:", String.valueOf(intent.getData()));
-        Log.d("intent data:", String.valueOf(intent.getDataString()));
-
-        Log.d("state:", "onResume");
-
-        // String[][] MainOptions = new String[][] {};
-
-        /*
-        String[] mainOption1 =  {"1", "bana kitap oku", "read a book", "begin", "play", "pause"};
-        String[] mainOption2 =  {"2", "second", "end", "view"};
-        String[] exit =  {"exit", "stop"};
-        String[] option1Play = {"back", "before"};
-        String[] option2Play = {"forward"};
-        */
-
-        // MainOptions[0] = mainOption1;
-        // MainOptions[1] = mainOption2;
-
-        if (isVoiceInteraction()) {
-
-            Message message = Message.obtain();
-            Log.d("a", String.valueOf(message.obj));
-
-            /*
-            VoiceInteractor.PickOptionRequest.Option mO1 = new VoiceInteractor.PickOptionRequest.Option("Play", 0);
-            VoiceInteractor.PickOptionRequest.Option mO2 = new VoiceInteractor.PickOptionRequest.Option("View", 1);
-
-
-            for (String option : mainOption1) {
-                mO1.addSynonym(option);
+        // Get intent at onResume
+        Intent receiveCommand = getIntent();
+        if (receiveCommand.hasExtra("commandId")){
+            switch (receiveCommand.getIntExtra("commandId", 0)){
+                case 0:
+                    mP.start();
+                    Log.d("case:", "start");
+                    break;
+                case 1:
+                    mP.pause();
+                    autoPlay = false;
+                    Log.d("case:", "pause");
+                    break;
+                case 2:
+                    Log.d("case:", "speedUp");
+                    if(speed.getProgress() != 5){
+                        speed.setProgress(speed.getProgress() + 1);
+                    } else{
+                        Toast.makeText(this, "Speed is highest already", Toast.LENGTH_LONG);
+                    }
+                    break;
+                case 3:
+                    Log.d("case:", "speedDown");
+                    if(speed.getProgress() != 0){
+                        speed.setProgress(speed.getProgress() - 1);
+                    } else{
+                        Toast.makeText(this, "Speed is lovest already", Toast.LENGTH_LONG);
+                    }
+                    break;
+                case 4:
+                    //Intent
+                    break;
             }
-            for (String option : mainOption2) {
-                mO2.addSynonym(option);
+        }
+        // If no intent
+        else{
+            if (autoPlay){
+                mP.start();
             }
-
-            Option[] options = new Option[]{mO1, mO2};
-            */
-
-            VoiceInteractor.PickOptionRequest.Option option = new VoiceInteractor.PickOptionRequest.Option("play", 0);
-            option.addSynonym("ready");
-            option.addSynonym("go");
-            option.addSynonym("take it");
-            option.addSynonym("ok");
-            option.addSynonym("pause");
-
-            Option[] optionL = new Option[]{option};
-
-            Prompt(optionL, "What do you want to do? Play or View?");
-
-            //TODO: Play / Pause
-            //TODO: Custom intent
-
         }
     }
 }

@@ -9,23 +9,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main" android:label="ready">
+        <activity
+            android:name=".main"
+            android:label="ready">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.actions.CREATE_NOTE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.actions.SEARCH_ACTION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Voice">
             <intent-filter>
                 <action android:name="android.media.action.STILL_IMAGE_CAMERA" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.VOICE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.google.android.gms.actions.CREATE_NOTE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.google.android.gms.actions.SEARCH_ACTION"/>
-                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
     </application>
