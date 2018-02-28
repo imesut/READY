@@ -102,18 +102,22 @@ public class main extends AppCompatActivity {
         super.onResume();
         // Get intent at onResume
         Intent receiveCommand = getIntent();
+        if (receiveCommand.hasExtra("cancelledVI")) { autoPlay = receiveCommand.getBooleanExtra("cancelledVI", false);}
         if (receiveCommand.hasExtra("commandId")){
             switch (receiveCommand.getIntExtra("commandId", 0)){
                 case 0:
+                    //Starting book
                     mP.start();
                     Log.d("case:", "start");
                     break;
                 case 1:
+                    //Pausing Book
                     mP.pause();
                     autoPlay = false;
                     Log.d("case:", "pause");
                     break;
                 case 2:
+                    //Speeding Up
                     Log.d("case:", "speedUp");
                     if(speed.getProgress() != 5){
                         speed.setProgress(speed.getProgress() + 1);
@@ -122,6 +126,7 @@ public class main extends AppCompatActivity {
                     }
                     break;
                 case 3:
+                    //Speeding Down
                     Log.d("case:", "speedDown");
                     if(speed.getProgress() != 0){
                         speed.setProgress(speed.getProgress() - 1);
@@ -130,12 +135,14 @@ public class main extends AppCompatActivity {
                     }
                     break;
                 case 4:
+                    //View Book Detail
                     //Intent
                     break;
             }
         }
         // If no intent
         else{
+            //autoPlay is stand for pausing the book for Voice Interaction use to avoid the intervention of TTS sound and book sound
             if (autoPlay){
                 mP.start();
             }

@@ -21,9 +21,7 @@ public class Voice extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         if (isVoiceInteraction()) {
-
             //Define options
             VoiceInteractor.PickOptionRequest.Option play = new VoiceInteractor.PickOptionRequest.Option("play", 0);
             VoiceInteractor.PickOptionRequest.Option pause = new VoiceInteractor.PickOptionRequest.Option("pause", 1);
@@ -38,9 +36,8 @@ public class Voice extends AppCompatActivity {
             speedDown.addSynonym("slow").addSynonym("slower").addSynonym("decrease").addSynonym("down");
             viewInfo.addSynonym("info").addSynonym("detail").addSynonym("about");
 
-
             //Make a list of options
-            VoiceInteractor.PickOptionRequest.Option[] optionList = new VoiceInteractor.PickOptionRequest.Option[]{play};
+            VoiceInteractor.PickOptionRequest.Option[] optionList = new VoiceInteractor.PickOptionRequest.Option[]{play, pause, speedUp, speedDown, viewInfo};
 
             //Set Prompt
             VoiceInteractor.Prompt prompt = new VoiceInteractor.Prompt("Give an order. Play, Pause, Speed up, Speed Down, View");
@@ -53,14 +50,17 @@ public class Voice extends AppCompatActivity {
                         Log.d("id", String.valueOf(selections[0].getIndex()));
                         Log.d("text", String.valueOf(selections.toString()));
                         Intent openApp = new Intent(Voice.this, main.class);
-                        openApp.putExtra("commandId", selections[0].getIndex());
+                        openApp.putExtra("commandId", selections[0].getIndex()).putExtra("cancelledVI", false);
                         startActivity(openApp);
                         finish();
                     }
                 }
                 @Override
                 public void onCancel() {
-                    Log.d("voice", "cancel");
+                    Intent openApp = new Intent(Voice.this, main.class);
+                    openApp.putExtra("cancelledVI", true);
+                    startActivity(openApp);
+                    finish();
                 }
             };
 
@@ -71,8 +71,9 @@ public class Voice extends AppCompatActivity {
                 Log.d("requests", getVoiceInteractor().getActiveRequests().toString());
             }*/
 
-            //TODO: Play / Pause
-            //TODO: Custom intent
+            //TODO: Play / Pause Test
+            //TODO: ~~Custom~~ More intent filters
+            //TODO: Test speed incremention/decremention
         }
     }
 }
