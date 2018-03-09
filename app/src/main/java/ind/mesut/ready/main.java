@@ -146,40 +146,7 @@ public class main extends AppCompatActivity {
         // Get intent at onResume
         Intent receiveCommand = getIntent();
         if (receiveCommand.hasExtra("commandId")){
-            switch (receiveCommand.getIntExtra("commandId", 0)){
-                case 0:
-                    //Starting book
-                    mP.start();
-                    Log.d("case:", "start");
-                    break;
-                case 1:
-                    //Pausing Book
-                    mP.pause();
-                    Log.d("case:", "pause");
-                    break;
-                case 2:
-                    //Speeding Up
-                    Log.d("case:", "speedUp");
-                    if(speed.getProgress() != 5){
-                        speed.setProgress(speed.getProgress() + 1);
-                    } else{
-                        Toast.makeText(this, "Speed is highest already", Toast.LENGTH_LONG);
-                    }
-                    break;
-                case 3:
-                    //Speeding Down
-                    Log.d("case:", "speedDown");
-                    if(speed.getProgress() != 0){
-                        speed.setProgress(speed.getProgress() - 1);
-                    } else{
-                        Toast.makeText(this, "Speed is lovest already", Toast.LENGTH_LONG);
-                    }
-                    break;
-                case 4:
-                    //View Book Detail
-                    //Intent
-                    break;
-            }
+            applyCommand(receiveCommand.getIntExtra("commandId", 0));
         }
         // If no intent
         else{
@@ -209,20 +176,18 @@ public class main extends AppCompatActivity {
                     String output = result.get(0);
                     Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
                     Log.d("Voice", output);
-
                     String[] dictatedWords = output.split(" ");
-
                     for (int i = 0; i < dictatedWords.length; i++) {
                         String dictatedWord = dictatedWords[i];
                         Log.d("word", dictatedWord);
-                        Integer command = seekCommand(dictatedWord);
-                        Log.d("int", String.valueOf(command));
-                            if (command >= 0) {
+                        Integer commandId = seekCommand(dictatedWord);
+                        Log.d("int", String.valueOf(commandId));
+                            if (commandId >= 0) {
+                                applyCommand(commandId);
                                 break;
                             }
                         }
                     }
-                    //TODO: seekCommand method
                 }
                 break;
             }
@@ -238,5 +203,42 @@ public class main extends AppCompatActivity {
             }
         }
         return -1;
+    }
+
+    protected void applyCommand(Integer commandId){
+        switch (commandId){
+            case 0:
+                //Starting book
+                mP.start();
+                Log.d("case:", "start");
+                break;
+            case 1:
+                //Pausing Book
+                mP.pause();
+                Log.d("case:", "pause");
+                break;
+            case 2:
+                //Speeding Up
+                Log.d("case:", "speedUp");
+                if(speed.getProgress() != 5){
+                    speed.setProgress(speed.getProgress() + 1);
+                } else{
+                    Toast.makeText(this, "Speed is highest already", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case 3:
+                //Speeding Down
+                Log.d("case:", "speedDown");
+                if(speed.getProgress() != 0){
+                    speed.setProgress(speed.getProgress() - 1);
+                } else{
+                    Toast.makeText(this, "Speed is lovest already", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case 4:
+                //View Book Detail
+                //Intent
+                break;
+        }
     }
 }
