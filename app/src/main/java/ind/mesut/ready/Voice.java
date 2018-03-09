@@ -30,11 +30,11 @@ public class Voice extends AppCompatActivity {
             VoiceInteractor.PickOptionRequest.Option viewInfo = new VoiceInteractor.PickOptionRequest.Option("view", 4);
 
             //Define Synonyms
-            play.addSynonym("ready").addSynonym("go").addSynonym("take it").addSynonym("ok");
-            pause.addSynonym("stop").addSynonym("wait");
-            speedUp.addSynonym("faster").addSynonym("increase").addSynonym("fast").addSynonym("up");
-            speedDown.addSynonym("slow").addSynonym("slower").addSynonym("decrease").addSynonym("down");
-            viewInfo.addSynonym("info").addSynonym("detail").addSynonym("about");
+            play.addSynonym("ready").addSynonym("go").addSynonym("take it").addSynonym("ok").addSynonym("Play").addSynonym("Oynat");
+            pause.addSynonym("stop").addSynonym("wait").addSynonym("Pause").addSynonym("Durdur");
+            speedUp.addSynonym("faster").addSynonym("increase").addSynonym("fast").addSynonym("up").addSynonym("Speed up").addSynonym("Hızlı").addSynonym("Hızlan");
+            speedDown.addSynonym("slow").addSynonym("slower").addSynonym("decrease").addSynonym("down").addSynonym("Yavaş").addSynonym("Yavaşla");
+            viewInfo.addSynonym("info").addSynonym("detail").addSynonym("about").addSynonym("Bilgi");
 
             //Make a list of options
             VoiceInteractor.PickOptionRequest.Option[] optionList = new VoiceInteractor.PickOptionRequest.Option[]{play, pause, speedUp, speedDown, viewInfo};
@@ -50,16 +50,13 @@ public class Voice extends AppCompatActivity {
                         Log.d("id", String.valueOf(selections[0].getIndex()));
                         Log.d("text", String.valueOf(selections.toString()));
                         Intent openApp = new Intent(Voice.this, main.class);
-                        openApp.putExtra("commandId", selections[0].getIndex()).putExtra("cancelledVI", false);
+                        openApp.putExtra("commandId", selections[0].getIndex());
                         startActivity(openApp);
                         finish();
                     }
                 }
                 @Override
                 public void onCancel() {
-                    Intent openApp = new Intent(Voice.this, main.class);
-                    openApp.putExtra("cancelledVI", true);
-                    startActivity(openApp);
                     finish();
                 }
             };
@@ -71,8 +68,7 @@ public class Voice extends AppCompatActivity {
                 Log.d("requests", getVoiceInteractor().getActiveRequests().toString());
             }*/
 
-            //TODO: Play / Pause Test
-            //TODO: ~~Custom~~ More intent filters
+            //TODO: Play / Pause Test - intent data transfer
             //TODO: Test speed incremention/decremention
         }
     }
