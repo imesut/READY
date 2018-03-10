@@ -15,7 +15,7 @@ public class Voice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice);
         TextView text = (TextView) findViewById(R.id.text);
-        text.setText("I'm Listening...");
+        text.setText(getString(R.string.listening));
     }
 
     @Override

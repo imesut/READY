@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">READY</string>
+    <string name="start">Start</string>
+    <string name="pause">Pause</string>
+    <string name="listening">Dinliyorum</string>
+    <string name="couldntListening">Dinleyemiyorum</string>
+    <string name="unsupportedLanguage">Dinleyemiyorum</string>
+    <string name="bookDetailTitle">Kitap Hakkında</string>
+    <string name="bookDetailContent">Deneme\nDeneme\nDeneme\nDeneme\nDeneme\nDeneme\nDeneme\nDeneme\n</string>
+    <string name="commandDetailTitle">Kitap Hakkında</string>
+    <string name="commandDetailContent">Deneme\nDeneme\nDeneme\nDeneme\nDeneme\nDeneme\nDeneme\nDeneme\n</string>
+    <string name="lowestSpeed">Speed is lovest already</string>
+    <string name="highestSpeed">Speed is highest already</string>
 </resources>
