@@ -13,13 +13,16 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".main"
-            android:label="ready">
+            android:label="ready"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Voice">
+        <activity
+            android:name=".Voice"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.media.action.STILL_IMAGE_CAMERA" />
                 <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />

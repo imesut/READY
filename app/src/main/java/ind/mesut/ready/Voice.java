@@ -68,8 +68,7 @@ public class Voice extends AppCompatActivity {
                 Log.d("requests", getVoiceInteractor().getActiveRequests().toString());
             }*/
 
-            //TODO: Play / Pause Test - intent data transfer
-            //TODO: Test speed incremention/decremention
+            //Speed incrementation didn't implemented properly...
         }
     }
 }
