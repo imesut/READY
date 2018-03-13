@@ -74,16 +74,16 @@ public class main extends AppCompatActivity {
     5: forward
     6: backward*/
     String[][] commands = new String[][] {
-            {"play", "ready", "go", "take it", "ok", "play", "oynat"},
-            {"pause", "stop", "wait", "pause", "durdur", "dur"},
-            {"up", "faster", "increase", "fast", "up", "speed up", "hızlı", "hızlan"},
-            {"down", "slow", "slower", "decrease", "down", "yavaş", "yavaşla"},
-            {"view", "info", "detail", "about", "bilgi", "hakkında", "details"},
+            {"play", "ready", "go", "take it", "ok", "oynat", "başlat", "başla", "oku", "devam"},
+            {"pause", "stop", "wait", "durdur", "dur", "bekle", "beklet"},
+            {"up", "faster", "increase", "fast", "speed up", "hızlı", "hızlan", "hızlandır"},
+            {"down", "slow", "slower", "decrease", "yavaş", "yavaşla","yavaşlat"},
+            {"view", "info", "detail", "about", "bilgi", "hakkında", "details", "detaylar", "kapak"},
             {"command", "commands", "komut", "komutlar", "help", "yardım"},
-            {"ileri", "forward", "next"},
+            {"ileri", "forward", "next", "atla"},
             {"geri", "back", "backward", "previous"},
-            {"yüksek", "sesli"},
-            {"alçak", "kısık"}
+            {"yüksek", "sesli", "loud"},
+            {"alçak", "kısık", "low"}
             };
 
     @Override
@@ -121,10 +121,14 @@ public class main extends AppCompatActivity {
         mP.seekTo(getSharedPreferences("cursor", Context.MODE_PRIVATE).getInt("cursor", 0));
 
         // Default Shaking Options
-        ShakeOptions options = new ShakeOptions().background(true).interval(1000).shakeCount(2).sensibility(2.0f);
+        ShakeOptions options = new ShakeOptions().background(true).interval(1000).shakeCount(2).sensibility(1.7f);
 
         //onShake Callback trigger promptSpeechInput()
-        this.shakeDetector = new ShakeDetector(options).start(this, new ShakeCallback() {@Override public void onShake() {promptSpeechInput();}});
+        this.shakeDetector = new ShakeDetector(options).start(this, new ShakeCallback() {
+            @Override public void onShake() {
+                promptSpeechInput();
+            }
+        });
 
         //micButton onClick trigger promptSpeechInput()
         micButton.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View view) {promptSpeechInput();}});
@@ -187,7 +191,6 @@ public class main extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //TODO: replace pause method with audiofocus method
         if (mP.isPlaying()){
             mP.pause();
         }
