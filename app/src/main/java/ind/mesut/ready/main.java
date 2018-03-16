@@ -56,6 +56,7 @@ public class main extends AppCompatActivity {
     SharedPreferences.Editor editor;
     private Handler handler = new Handler();
     AudioManager audioManager;
+    Boolean adhoc = true;
 
     //Request code defined for RecognizerIntent at promptSpeechInput() method
     Integer speechInputCode = 7823;
@@ -214,21 +215,23 @@ public class main extends AppCompatActivity {
     //Voice Recognition Intent Prompt
     private void promptSpeechInput() {
         //Speech Recognition Intent
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.listening));
+        if(adhoc) {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.listening));
+            adhoc = false;
 
-        //Starting Recognition Activity
-        try {
-            if (mP.isPlaying()){
-                mP.pause();
-                pausedByIntent = true;
-
+            //Starting Recognition Activity
+            try {
+                if (mP.isPlaying()) {
+                    mP.pause();
+                    pausedByIntent = true;
+                }
+                startActivityForResult(intent, speechInputCode);
+            } catch (ActivityNotFoundException a) {
+                Toast.makeText(getApplicationContext(), getString(R.string.couldntListening), Toast.LENGTH_SHORT).show();
             }
-            startActivityForResult(intent, speechInputCode);
-        } catch (ActivityNotFoundException a) {
-            Toast.makeText(getApplicationContext(), getString(R.string.couldntListening), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -263,6 +266,7 @@ public class main extends AppCompatActivity {
                 }
                 break;
             }
+            adhoc = true;
         }
 
     //Seek commands from dictated string
